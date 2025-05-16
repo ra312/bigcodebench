@@ -11,7 +11,7 @@ from concurrent.futures._base import CancelledError
 from datetime import datetime
 from typing import Any, Dict, List, Tuple, Optional
 from warnings import warn
-from gradio_client import Client, handle_file
+# from gradio_client import Client, handle_file
 from e2b import Sandbox
 
 import httpx
