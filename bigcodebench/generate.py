@@ -18,6 +18,7 @@ from rich.progress import (
 def codegen(
     model: DecoderBase,
     target_path: str,
+    bigcodebench_dataset_version: str,
     split: str,
     subset: str,
     greedy: bool = False,
@@ -35,7 +36,7 @@ def codegen(
         TimeElapsedColumn(),
     ) as p:
             
-        dataset = get_bigcodebench(subset=subset)
+        dataset = get_bigcodebench(subset=subset, version=bigcodebench_dataset_version)
 
         if model.is_direct_completion() and split == "instruct":
             raise Exception("Base model does not support direct completion for instruct tasks")
@@ -125,6 +126,7 @@ def codegen(
 def run_codegen(
     model: str,
     split: str,
+    bigcodebench_dataset_version: str,
     subset: str,
     root: str = "bcb_results",
     lora_path: str = None,
@@ -218,6 +220,7 @@ def run_codegen(
     
     codegen(
         model=model_runner,
+        bigcodebench_dataset_version=bigcodebench_dataset_version,
         target_path=target_path,
         split=split,
         subset=subset,
