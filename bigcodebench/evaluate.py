@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Tuple, Optional
 from warnings import warn
 # from gradio_client import Client, handle_file
-from e2b import Sandbox
+# from e2b import Sandbox
 
 import httpx
 import numpy as np
@@ -116,6 +116,7 @@ def check_correctness(
 
 def evaluate(
     split: str,
+    bigcodebench_dataset_version: str,
     subset: str,
     samples: Optional[str] = None,
     no_execute: bool = False,
@@ -139,6 +140,7 @@ def evaluate(
         samples = run_codegen(
             split=split,
             subset=subset,
+            bigcodebench_dataset_version=bigcodebench_dataset_version,
             **model_kwargs,
         )
     
@@ -181,33 +183,34 @@ def evaluate(
         failed_tasks = pass_at_k["failed_tasks"]
     
     elif execution == "e2b":
-        sandbox = Sandbox(e2b_endpoint, api_key=os.environ["E2B_API_KEY"], timeout=60*60)
+        pass
+        # sandbox = Sandbox(e2b_endpoint, api_key=os.environ["E2B_API_KEY"], timeout=60*60)
 
-        # upload file to sandbox
-        with open(samples, "r") as file:
-            sandbox.files.write(samples, file)
+        # # upload file to sandbox
+        # with open(samples, "r") as file:
+        #     sandbox.files.write(samples, file)
         
-        # run the evaluation
-        print(f"Command run in sandbox {e2b_endpoint}")
-        command = "bigcodebench.evaluate  --execution 'local' "\
-                        f"--split {split} --subset {subset} --samples {samples} "\
-                        f"--pass_k {pass_k} --save_pass_rate {save_pass_rate} --calibrated {calibrated} "\
-                        f"--parallel {parallel} --selective_evaluate {selective_evaluate} --min_time_limit {min_time_limit} "\
-                        f"--max_as_limit {max_as_limit} --max_data_limit {max_data_limit} --max_stack_limit {max_stack_limit} "
+        # # run the evaluation
+        # print(f"Command run in sandbox {e2b_endpoint}")
+        # command = "bigcodebench.evaluate  --execution 'local' "\
+        #                 f"--split {split} --subset {subset} --samples {samples} "\
+        #                 f"--pass_k {pass_k} --save_pass_rate {save_pass_rate} --calibrated {calibrated} "\
+        #                 f"--parallel {parallel} --selective_evaluate {selective_evaluate} --min_time_limit {min_time_limit} "\
+        #                 f"--max_as_limit {max_as_limit} --max_data_limit {max_data_limit} --max_stack_limit {max_stack_limit} "
         
-        if  check_gt_only:
-            command += f"--check_gt_only "
-        if no_gt:
-            command += f"--no_gt "
-        if no_execute:
-            command += f"--no_execute "
-        sandbox.commands.run(command, on_stdout=lambda x: print(x), on_stderr=lambda x: print(x), timeout=60*60)
+        # if  check_gt_only:
+        #     command += f"--check_gt_only "
+        # if no_gt:
+        #     command += f"--no_gt "
+        # if no_execute:
+        #     command += f"--no_execute "
+        # sandbox.commands.run(command, on_stdout=lambda x: print(x), on_stderr=lambda x: print(x), timeout=60*60)
         
-        if not check_gt_only:
-            # download the results
-            content = sandbox.files.read(result_path)
-            with open(result_path, "w") as file:
-                file.write(content)
+        # if not check_gt_only:
+        #     # download the results
+        #     content = sandbox.files.read(result_path)
+        #     with open(result_path, "w") as file:
+        #         file.write(content)
 
     else:
         
