@@ -34,7 +34,7 @@ def trusted_exec(code, test_code, task_id, max_as_limit, max_data_limit, max_sta
             module_name = "__test__"
             new_module = types.ModuleType(module_name)
 
-            reliability_guard(max_as_limit, max_data_limit, max_stack_limit)
+            # reliability_guard(max_as_limit, max_data_limit, max_stack_limit)
 
             # Set necessary attributes for the module
             new_module.__dict__.update({

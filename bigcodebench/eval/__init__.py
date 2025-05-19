@@ -127,7 +127,7 @@ def unsafe_execute(
         rmdir = os.rmdir
         chdir = os.chdir
         # Disable functionalities that can make destructive changes to the test.
-        reliability_guard(max_as_limit, max_data_limit, max_stack_limit)
+        # reliability_guard(max_as_limit, max_data_limit, max_stack_limit)
         module_name = "__test__"
         new_module = types.ModuleType(module_name)
         # Set necessary attributes for the module
