@@ -304,17 +304,20 @@ def reliability_guard(max_as_limit, max_data_limit, max_stack_limit):
         max_as_limit = max_as_limit * 1024 * 1024
         max_data_limit = max_data_limit * 1024 * 1024
         max_stack_limit = max_stack_limit * 1024 * 1024
-        
-        resource.setrlimit(
-            resource.RLIMIT_AS, (max_as_limit, max_as_limit)
-        )
-        resource.setrlimit(
-            resource.RLIMIT_DATA, (max_data_limit, max_data_limit)
-        )
-        if not platform.uname().system == "Darwin":
+        try:
             resource.setrlimit(
-                resource.RLIMIT_STACK, (max_stack_limit, max_stack_limit)
+                resource.RLIMIT_AS, (max_as_limit, max_as_limit)
             )
+            resource.setrlimit(
+                resource.RLIMIT_DATA, (max_data_limit, max_data_limit)
+            )
+            if not platform.uname().system == "Darwin":
+                resource.setrlimit(
+                    resource.RLIMIT_STACK, (max_stack_limit, max_stack_limit)
+                )
+        except Exception as e:
+            print(f"Failed to set resource limits: {e}")
+            
 
     faulthandler.disable()
 
